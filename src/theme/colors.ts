@@ -22,4 +22,10 @@ export const colors: ThemeColors = {
   white: '#FFFFFF',
   black: '#000000',
   transparent: 'transparent',
+  bottomTabBackground: '#2E2739',
+  activeTab: '#FFFFFF',
+  inActiveTab: '#827D88',
+  searchBackground: '#F2F2F6',
+  borderColor: '#EFEFEF',
+  placeholderColor: '#202C434D',
 };

@@ -57,3 +57,13 @@ export const useSearchMovies = (query: string) => {
     enabled: !!query,
   });
 };
+
+export const useGenres = () => {
+  return useQuery({
+    queryKey: ['genres'],
+    queryFn: () =>
+      apiClient<{ genres: { id: number; name: string }[] }>(
+        '/genre/movie/list',
+      ),
+  });
+};

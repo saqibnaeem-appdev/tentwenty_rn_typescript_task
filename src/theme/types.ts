@@ -18,6 +18,12 @@ export interface ThemeColors {
   white: string;
   black: string;
   transparent: string;
+  bottomTabBackground: string;
+  activeTab: string;
+  inActiveTab: string;
+  searchBackground: string;
+  borderColor: string;
+  placeholderColor: string;
 }
 
 export interface ThemeFonts {
