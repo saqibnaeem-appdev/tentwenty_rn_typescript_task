@@ -5670,11 +5670,6 @@ react-is@^19.1.0, react-is@^19.2.0:
   resolved "https://registry.yarnpkg.com/react-is/-/react-is-19.2.4.tgz#a080758243c572ccd4a63386537654298c99d135"
   integrity sha512-W+EWGn2v0ApPKgKKCy/7s7WHXkboGcsrXE+2joLyVxkbyVQfO3MUEaUQDHoSmb8TFFrSKYa9mw64WZHNHSDzYA==
 
-react-native-auto-skeleton@^0.1.30:
-  version "0.1.30"
-  resolved "https://registry.yarnpkg.com/react-native-auto-skeleton/-/react-native-auto-skeleton-0.1.30.tgz#47d20162106abe11e8ad01ce81c7c76929787bea"
-  integrity sha512-+xm4R2ogzpVNGXj8ov2e2FWymoW27NzpEb9k36QyWLUQHxUd1pC08BtRGAQUpp3mXLkJqY5oEe6l/XYLHbqd+Q==
-
 react-native-gesture-handler@^2.30.0:
   version "2.30.0"
   resolved "https://registry.yarnpkg.com/react-native-gesture-handler/-/react-native-gesture-handler-2.30.0.tgz#990c621fbeeefde853ececdcab7cbe1b621dbb8b"

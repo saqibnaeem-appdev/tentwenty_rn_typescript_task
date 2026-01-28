@@ -13,17 +13,29 @@ import MovieSearchListItem from '../list/MovieSearchListItem';
 interface Props {
   movies: Movie[] | undefined;
   isLoading?: boolean;
+  isShowingResult?: boolean;
 }
 
-const SearchResults: FC<Props> = ({ movies, isLoading = false }) => {
+const SearchResults: FC<Props> = ({
+  movies,
+  isLoading = false,
+  isShowingResult = false,
+}) => {
   return (
     <View style={styles.container}>
+      {isShowingResult && (
+        <View style={styles.resultContainer}>
+          <Text style={styles.title}>Top Results</Text>
+        </View>
+      )}
+
       <FlatList
         data={
           isLoading
             ? Array(5).fill({ id: 'skeleton' })
             : movies ?? [null, null, null, null, null]
         }
+        showsVerticalScrollIndicator={false}
         keyExtractor={item => String(item?.id)}
         renderItem={({ item }) => <MovieSearchListItem movie={item} />}
         contentContainerStyle={styles.listContent}
@@ -44,5 +56,19 @@ const styles = StyleSheet.create({
   },
   listContent: {
     paddingHorizontal: getWidth(20),
+    paddingTop: getHeight(20),
+    paddingBottom: getHeight(100),
+  },
+  resultContainer: {
+    marginHorizontal: getWidth(20),
+    color: colors.textMain,
+    borderBottomWidth: 1,
+    borderBottomColor: colors.grayMedium,
+    paddingTop: getHeight(20),
+  },
+  title: {
+    ...textStyles.h2,
+    color: colors.textMain,
+    paddingBottom: getHeight(10),
   },
 });

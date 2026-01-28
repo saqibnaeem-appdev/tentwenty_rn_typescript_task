@@ -92,8 +92,9 @@ const MovieListScreen = () => {
       return <CategoryGrid onSelectGenre={genre => setSearchQuery(genre)} />;
     }
 
-    // Suggestions (Typing)
-    return <SearchResults movies={results} isLoading={isLoading} />;
+    return (
+      <SearchResults movies={results} isLoading={isLoading} isShowingResult />
+    );
   };
 
   return (

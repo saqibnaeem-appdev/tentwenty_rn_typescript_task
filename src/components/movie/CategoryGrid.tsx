@@ -52,7 +52,10 @@ const CategoryGrid: FC<Props> = ({ onSelectGenre }) => {
         keyExtractor={(item, index) => String(item.id) || `skeleton-${index}`}
         numColumns={2}
         columnWrapperStyle={{ justifyContent: 'space-between' }}
-        contentContainerStyle={{ paddingBottom: getHeight(100) }}
+        contentContainerStyle={{
+          paddingBottom: getHeight(100),
+          paddingTop: getHeight(20),
+        }}
         ItemSeparatorComponent={() => (
           <View style={{ height: getHeight(10) }} />
         )}
@@ -97,7 +100,7 @@ const styles = StyleSheet.create({
   container: {
     flex: 1,
     paddingHorizontal: getWidth(20),
-    backgroundColor: colors.searchBackground,
+    backgroundColor: colors.background,
   },
   itemContainer: {
     width: getWidth(163),
@@ -106,5 +109,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     paddingHorizontal: getWidth(15),
     overflow: 'hidden',
+  },
+  listContent: {
+    paddingBottom: getHeight(20),
   },
 });

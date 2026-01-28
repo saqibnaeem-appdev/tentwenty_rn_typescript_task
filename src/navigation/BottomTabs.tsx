@@ -2,6 +2,7 @@ import React from 'react';
 import { Text } from 'react-native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import type { BottomTabNavigationOptions } from '@react-navigation/bottom-tabs';
+import { getFocusedRouteNameFromRoute } from '@react-navigation/native';
 
 import {
   DashboardScreen,
@@ -45,6 +46,16 @@ const BottomTabs: React.FC = () => {
       bottom: 0,
       borderTopWidth: 0,
       paddingTop: getHeight(8),
+      display: (
+        [
+          routes.movieDetailScreen,
+          routes.trailerPlayerScreen,
+          routes.seatSelectionScreen,
+          routes.ticketBookingScreen,
+        ] as string[]
+      ).includes(getFocusedRouteNameFromRoute(route) ?? '')
+        ? 'none'
+        : 'flex',
     },
     tabBarItemStyle: {
       paddingTop: getHeight(5),

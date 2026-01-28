@@ -4,12 +4,16 @@ export type WatchStackParamList = {
   MovieListScreen: undefined;
   MovieDetailScreen: { id: number };
   SearchScreen: undefined;
-  SeatSelectionScreen: {
+  TicketBookingScreen: {
     movieId: number;
-    title: string;
-    posterPath: string;
+    movieTitle: string;
     date: string;
-    time: string;
+  };
+  SeatSelectionScreen: {
+    movieTitle: string;
+    dateString: string;
+    hall: string;
+    price?: number;
   };
   TrailerPlayerScreen: { videoId: string };
 };

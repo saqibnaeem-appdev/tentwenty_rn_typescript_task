@@ -10,6 +10,8 @@ const routes = {
   movieDetailScreen: 'MovieDetailScreen',
   movieListScreen: 'MovieListScreen',
   seatSelectionScreen: 'SeatSelectionScreen',
+  trailerPlayerScreen: 'TrailerPlayerScreen',
+  ticketBookingScreen: 'TicketBookingScreen',
 } as const;
 
 export default routes;

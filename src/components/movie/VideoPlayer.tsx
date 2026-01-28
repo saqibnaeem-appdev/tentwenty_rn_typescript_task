@@ -42,7 +42,7 @@ const VideoPlayer: React.FC<VideoPlayerProps> = ({
 
   return (
     <Modal visible={visible} animationType="fade" onRequestClose={onClose}>
-      <StatusBar hidden={isLandscape} />
+      {/* <StatusBar hidden={isLandscape} /> */}
       <View style={styles.container}>
         <YoutubePlayer
           width={playerWidth}

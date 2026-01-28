@@ -3,9 +3,8 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {
   MovieDetailScreen,
   MovieListScreen,
-  SearchScreen,
   SeatSelectionScreen,
-  TrailerPlayerScreen,
+  TicketBookingScreen,
 } from '@/features/movies';
 import { WatchStackParamList } from './types';
 
@@ -19,6 +18,10 @@ const WatchStack = () => {
       <Stack.Screen
         name="SeatSelectionScreen"
         component={SeatSelectionScreen}
+      />
+      <Stack.Screen
+        name="TicketBookingScreen"
+        component={TicketBookingScreen}
       />
     </Stack.Navigator>
   );

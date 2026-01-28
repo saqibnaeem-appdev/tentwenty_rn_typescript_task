@@ -2,8 +2,10 @@ import React, { useCallback, useState } from 'react';
 import {
   ImageBackground,
   ScrollView,
+  StatusBar,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
@@ -18,10 +20,11 @@ import { AppButton, CustomSkeletonWrapper, VideoPlayer } from '@/components';
 import routes from '@/navigation/routes';
 import useOrientation from '../../hooks/useOrientation';
 import { colors, getFontSize, getHeight, getWidth, textStyles } from '@/theme';
+import { BackIcon } from '@/assets/svgs';
 
 const MovieDetailScreen = ({ route }: any) => {
   const { id } = route.params;
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const isLandscape = useOrientation();
 
   const [videoUrl, setVideoUrl] = useState<string | undefined>();
@@ -41,36 +44,50 @@ const MovieDetailScreen = ({ route }: any) => {
     }
   }, [trailerKey]);
 
-  // if (isLoading) {
-  //   return (
-  //     <View style={styles.loader}>
-  //       <Text>Loading...</Text>
-  //     </View>
-  //   );
-  // }
   const getRandomColor: () => string = () => {
-    const colors = ['#15D2BC', '#E26CA5', '#564CA3', '#CD9D0F'];
+    const colorPalette = [
+      colors.primary,
+      colors.error,
+      colors.secondary,
+      colors.warning,
+      colors.success,
+      colors.teal,
+    ];
 
-    const randomIndex = Math.floor(Math.random() * colors.length);
+    const randomIndex = Math.floor(Math.random() * colorPalette.length);
 
-    return colors[randomIndex];
+    return colorPalette[randomIndex];
   };
   return (
-    <ScrollView
-      contentContainerStyle={[
-        styles.screenContainer,
-        { flexDirection: isLandscape ? 'row' : 'column' },
-      ]}
+    <CustomSkeletonWrapper
+      isLoading={isLoading}
+      style={{ height: getHeight(359) }}
     >
-      <CustomSkeletonWrapper
-        isLoading={isLoading}
-        style={{ height: getHeight(359) }}
+      <ScrollView
+        contentContainerStyle={[
+          styles.screenContainer,
+          { flexDirection: isLandscape ? 'row' : 'column' },
+        ]}
       >
+        <StatusBar barStyle={'light-content'} />
+
         <ImageBackground
           resizeMode="stretch"
           style={styles.imageContainer}
           source={{ uri: IMAGE_BASE_URL + backdropPath }}
         >
+          <View style={styles.fullOverlay} />
+
+          <View style={styles.header}>
+            <TouchableOpacity
+              style={styles.backButton}
+              onPress={() => navigation.goBack()}
+            >
+              <BackIcon color={colors.white} />
+              <Text style={styles.watchText}>Watch</Text>
+            </TouchableOpacity>
+          </View>
+
           <View style={styles.imageOverlay}>
             <Text style={[textStyles.h2, { fontSize: getFontSize(16) }]}>
               In theaters{' '}
@@ -86,7 +103,11 @@ const MovieDetailScreen = ({ route }: any) => {
                 title="Get Tickets"
                 variant="primary"
                 onPress={() =>
-                  navigation.navigate(routes.seatSelectionScreen as never)
+                  navigation.navigate(routes.ticketBookingScreen, {
+                    movieId: id,
+                    movieTitle: movieDetail?.title,
+                    date: movieDetail?.release_date,
+                  })
                 }
               />
 
@@ -98,66 +119,60 @@ const MovieDetailScreen = ({ route }: any) => {
             </View>
           </View>
         </ImageBackground>
-      </CustomSkeletonWrapper>
-      <CustomSkeletonWrapper
-        isLoading={isLoading}
-        style={{
-          height: getHeight(100),
-          width: getWidth(360),
-          alignSelf: 'center',
-        }}
-      >
-        <View style={styles.contentContainer}>
-          <Text style={[textStyles.h3, { color: colors.textMain }]}>
-            Genres
-          </Text>
+        <CustomSkeletonWrapper
+          isLoading={isLoading}
+          style={{
+            height: getHeight(100),
+            width: getWidth(360),
+            alignSelf: 'center',
+          }}
+        >
+          <View style={styles.contentContainer}>
+            <Text style={[textStyles.h3, { color: colors.textMain }]}>
+              Genres
+            </Text>
 
-          <View style={styles.genresContainer}>
-            {movieDetail?.genres?.map(item => (
-              <View
-                key={item.id}
-                style={[
-                  styles.genreaItem,
-                  { backgroundColor: getRandomColor() },
-                ]}
-              >
-                <Text
+            <View style={styles.genresContainer}>
+              {movieDetail?.genres?.map(item => (
+                <View
+                  key={item.id}
                   style={[
-                    textStyles.h2,
-                    { color: colors.white, fontSize: getFontSize(12) },
+                    styles.genreaItem,
+                    { backgroundColor: getRandomColor() },
                   ]}
                 >
-                  {item.name}
-                </Text>
-              </View>
-            ))}
+                  <Text
+                    style={[
+                      textStyles.h2,
+                      { color: colors.white, fontSize: getFontSize(12) },
+                    ]}
+                  >
+                    {item.name}
+                  </Text>
+                </View>
+              ))}
+            </View>
+
+            <Text
+              style={[
+                textStyles.h3,
+                { color: colors.textMain, marginVertical: getHeight(10) },
+              ]}
+            >
+              Overview
+            </Text>
+            <Text style={[textStyles.h4, { color: colors.grayMedium }]}>
+              {movieDetail?.overview}
+            </Text>
           </View>
-
-          <Text
-            style={[
-              textStyles.h3,
-              { color: colors.textMain, marginVertical: getHeight(10) },
-            ]}
-          >
-            Overview
-          </Text>
-          <Text style={[textStyles.h4, { color: colors.grayMedium }]}>
-            {movieDetail?.overview}
-          </Text>
-        </View>
-      </CustomSkeletonWrapper>
-      <VideoPlayer
-        visible={videoUrl !== undefined}
-        onClose={() => setVideoUrl(undefined)}
-        videoKey={videoUrl ?? ''}
-      />
-
-      {/* <VideoPlayer
-        visible={!!videoUrl}
-        onClose={() => setVideoUrl(undefined)}
-        videoKey={videoUrl ?? ''}
-      /> */}
-    </ScrollView>
+        </CustomSkeletonWrapper>
+        <VideoPlayer
+          visible={videoUrl !== undefined}
+          onClose={() => setVideoUrl(undefined)}
+          videoKey={videoUrl ?? ''}
+        />
+      </ScrollView>
+    </CustomSkeletonWrapper>
   );
 };
 
@@ -169,18 +184,23 @@ const styles = StyleSheet.create({
     backgroundColor: colors.background,
     height: getHeight(359),
   },
+
   imageContainer: {
     flex: 1,
     justifyContent: 'flex-end',
   },
   imageOverlay: {
-    flex: 1,
-    backgroundColor: 'rgba(0,0,0,0.2)',
     alignItems: 'center',
     paddingBottom: 20,
     justifyContent: 'flex-end',
     gap: 5,
+    flex: 1,
   },
+  fullOverlay: {
+    ...StyleSheet.absoluteFill,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+  },
+
   contentContainer: {
     flex: 1,
     paddingVertical: getHeight(20),
@@ -207,5 +227,19 @@ const styles = StyleSheet.create({
   },
   buttonContainer: {
     gap: getHeight(10),
+  },
+  header: {
+    marginTop: getHeight(50),
+    paddingHorizontal: getWidth(20),
+  },
+  backButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 10,
+  },
+  watchText: {
+    ...textStyles.h3,
+    color: colors.white,
+    fontSize: getFontSize(16),
   },
 });
