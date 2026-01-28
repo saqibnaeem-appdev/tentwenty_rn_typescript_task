@@ -16,6 +16,7 @@ import { AppButton } from '@/components';
 import routes from '@/navigation/routes';
 import { seatMap } from '@/assets/images';
 import ScreenHeader from '@/components/movie/ScreenHeader';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const TicketBookingScreen = () => {
   const navigation = useNavigation<any>();
@@ -59,63 +60,67 @@ const TicketBookingScreen = () => {
   };
 
   return (
-    <View style={styles.container}>
-      <ScreenHeader
-        title={movieTitle || "The King's Man"}
-        description={`${
-          movieTitle || "The King's Man"
-        }  In Theaters December 22, 2021`}
-        onPress={() => navigation.goBack()}
-      />
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: colors.white }}
+      edges={['top']}
+    >
+      <View style={styles.container}>
+        <ScreenHeader
+          title={movieTitle || "The King's Man"}
+          description={`${
+            movieTitle || "The King's Man"
+          }  In Theaters December 22, 2021`}
+          onPress={() => navigation.goBack()}
+        />
 
-      <ScrollView contentContainerStyle={styles.scrollContent}>
-        <Text style={styles.sectionLabel}>Date</Text>
-        <View style={styles.dateListContainer}>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.dateScroll}
-          >
-            {dates.map(d => {
-              const isSelected = selectedDate === d;
-              return (
-                <TouchableOpacity
-                  key={d}
-                  style={[
-                    styles.dateChip,
-                    isSelected && styles.dateChipSelected,
-                  ]}
-                  onPress={() => setSelectedDate(d)}
-                >
-                  <Text
+        <ScrollView contentContainerStyle={styles.scrollContent}>
+          <Text style={styles.sectionLabel}>Date</Text>
+          <View style={styles.dateListContainer}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.dateScroll}
+            >
+              {dates.map(d => {
+                const isSelected = selectedDate === d;
+                return (
+                  <TouchableOpacity
+                    key={d}
                     style={[
-                      styles.dateText,
-                      isSelected && styles.dateTextSelected,
+                      styles.dateChip,
+                      isSelected && styles.dateChipSelected,
                     ]}
+                    onPress={() => setSelectedDate(d)}
                   >
-                    {d}
-                  </Text>
-                </TouchableOpacity>
-              );
-            })}
-          </ScrollView>
-        </View>
+                    <Text
+                      style={[
+                        styles.dateText,
+                        isSelected && styles.dateTextSelected,
+                      ]}
+                    >
+                      {d}
+                    </Text>
+                  </TouchableOpacity>
+                );
+              })}
+            </ScrollView>
+          </View>
 
-        <View style={styles.hallsWrapper}>
-          <ScrollView
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={styles.hallsContainer}
-          >
-            {halls.map(hall => {
-              const isSelected = selectedHall === hall.time;
-              return (
-                <View key={hall.id} style={styles.hallItemContainer}>
-                  <View style={styles.hallHeader}>
-                    <Text style={styles.hallTime}>{hall.time}</Text>
-                    <Text style={styles.hallName}>{hall.name}</Text>
-                  </View>
-                  {/* <TouchableOpacity
+          <View style={styles.hallsWrapper}>
+            <ScrollView
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={styles.hallsContainer}
+            >
+              {halls.map(hall => {
+                const isSelected = selectedHall === hall.time;
+                return (
+                  <View key={hall.id} style={styles.hallItemContainer}>
+                    <View style={styles.hallHeader}>
+                      <Text style={styles.hallTime}>{hall.time}</Text>
+                      <Text style={styles.hallName}>{hall.name}</Text>
+                    </View>
+                    {/* <TouchableOpacity
                     style={[
                       styles.hallCard,
                       isSelected && styles.hallCardSelected,
@@ -146,40 +151,41 @@ const TicketBookingScreen = () => {
                       ))}
                     </View>
                   </TouchableOpacity> */}
-                  <TouchableOpacity
-                    style={[
-                      styles.hallCard,
-                      isSelected && styles.hallCardSelected,
-                    ]}
-                    onPress={() => setSelectedHall(hall.time)}
-                    activeOpacity={0.9}
-                  >
-                    <Image source={seatMap} style={styles.seatMapPreview} />
-                  </TouchableOpacity>
-                  <Text style={styles.priceText}>
-                    From{' '}
-                    <Text style={styles.boldPrice}>
-                      {hall.price.split(' ')[0]}
-                    </Text>{' '}
-                    or {hall.price.split(' or ')[1]}
-                  </Text>
-                </View>
-              );
-            })}
-          </ScrollView>
-        </View>
-      </ScrollView>
+                    <TouchableOpacity
+                      style={[
+                        styles.hallCard,
+                        isSelected && styles.hallCardSelected,
+                      ]}
+                      onPress={() => setSelectedHall(hall.time)}
+                      activeOpacity={0.9}
+                    >
+                      <Image source={seatMap} style={styles.seatMapPreview} />
+                    </TouchableOpacity>
+                    <Text style={styles.priceText}>
+                      From{' '}
+                      <Text style={styles.boldPrice}>
+                        {hall.price.split(' ')[0]}
+                      </Text>{' '}
+                      or {hall.price.split(' or ')[1]}
+                    </Text>
+                  </View>
+                );
+              })}
+            </ScrollView>
+          </View>
+        </ScrollView>
 
-      <View style={styles.footer}>
-        <AppButton
-          title="Select Seats"
-          variant="primary"
-          width={getWidth(335)}
-          onPress={handleSelectSeats}
-          style={styles.selectButton}
-        />
+        <View style={styles.footer}>
+          <AppButton
+            title="Select Seats"
+            variant="primary"
+            width={getWidth(335)}
+            onPress={handleSelectSeats}
+            style={styles.selectButton}
+          />
+        </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 

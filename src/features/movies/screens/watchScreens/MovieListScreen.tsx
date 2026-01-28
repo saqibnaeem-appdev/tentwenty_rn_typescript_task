@@ -7,6 +7,7 @@ import CategoryGrid from '@/components/movie/CategoryGrid';
 import SearchResults from '@/components/movie/SearchResults';
 
 import { useSearchMovies } from '@/features/movies';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const MovieListScreen = () => {
   const [searchQuery, setSearchQuery] = useState<string>('');
@@ -98,22 +99,27 @@ const MovieListScreen = () => {
   };
 
   return (
-    <View style={styles.screenContainer}>
-      <SearchBar
-        isSearching={isSearching}
-        setIsSearching={setIsSearching}
-        value={searchQuery}
-        onChangeText={handleSearchChange}
-        onClear={handleClearText}
-        onClose={handleCloseSearch}
-        onSubmitEditing={handleSearchSubmit}
-        returnKeyType="search"
-        isSubmitted={isSubmitted}
-        onBack={handleBackFromResults}
-        resultsCount={resultsCount}
-      />
-      {renderContent()}
-    </View>
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: colors.white }}
+      edges={['top']}
+    >
+      <View style={styles.screenContainer}>
+        <SearchBar
+          isSearching={isSearching}
+          setIsSearching={setIsSearching}
+          value={searchQuery}
+          onChangeText={handleSearchChange}
+          onClear={handleClearText}
+          onClose={handleCloseSearch}
+          onSubmitEditing={handleSearchSubmit}
+          returnKeyType="search"
+          isSubmitted={isSubmitted}
+          onBack={handleBackFromResults}
+          resultsCount={resultsCount}
+        />
+        {renderContent()}
+      </View>
+    </SafeAreaView>
   );
 };
 

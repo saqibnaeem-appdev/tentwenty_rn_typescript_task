@@ -20,6 +20,7 @@ import {
 import { colors, getBorderRadius, getHeight } from '@/theme';
 import { textStyles } from '@/theme/textStyles';
 import routes from './routes';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 const Tab = createBottomTabNavigator<BottomTabParamList>();
 
@@ -98,18 +99,23 @@ const BottomTabs: React.FC = () => {
   });
 
   return (
-    <Tab.Navigator
-      screenOptions={screenOptions}
-      initialRouteName={routes.watchStack}
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: colors.bottomTabBackground }}
+      edges={['bottom']}
     >
-      <Tab.Screen name={routes.dashboardScreen} component={DashboardScreen} />
-      <Tab.Screen name={routes.watchStack} component={WatchStack} />
-      <Tab.Screen
-        name={routes.mediaLibraryScreen}
-        component={MediaLibraryScreen}
-      />
-      <Tab.Screen name={routes.moreScreen} component={MoreScreen} />
-    </Tab.Navigator>
+      <Tab.Navigator
+        screenOptions={screenOptions}
+        initialRouteName={routes.watchStack}
+      >
+        <Tab.Screen name={routes.dashboardScreen} component={DashboardScreen} />
+        <Tab.Screen name={routes.watchStack} component={WatchStack} />
+        <Tab.Screen
+          name={routes.mediaLibraryScreen}
+          component={MediaLibraryScreen}
+        />
+        <Tab.Screen name={routes.moreScreen} component={MoreScreen} />
+      </Tab.Navigator>
+    </SafeAreaView>
   );
 };
 

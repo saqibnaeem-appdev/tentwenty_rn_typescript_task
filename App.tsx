@@ -7,7 +7,7 @@
 import 'react-native-reanimated';
 import 'react-native-gesture-handler';
 import React from 'react';
-import { StatusBar, StyleSheet } from 'react-native';
+import { LogBox, StatusBar, StyleSheet } from 'react-native';
 import { SafeAreaProvider, SafeAreaView } from 'react-native-safe-area-context';
 import { NavigationContainer } from '@react-navigation/native';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
@@ -16,7 +16,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import 'react-native-reanimated';
 import 'react-native-gesture-handler';
 const queryClient = new QueryClient();
-
+LogBox.ignoreAllLogs(true);
 function App() {
   return (
     <SafeAreaProvider>

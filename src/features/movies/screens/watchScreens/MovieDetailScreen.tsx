@@ -59,18 +59,21 @@ const MovieDetailScreen = ({ route }: any) => {
     return colorPalette[randomIndex];
   };
   return (
-    <CustomSkeletonWrapper
-      isLoading={isLoading}
-      style={{ height: getHeight(359) }}
+    <ScrollView
+      contentContainerStyle={[
+        styles.screenContainer,
+        { flexDirection: isLandscape ? 'row' : 'column' },
+      ]}
     >
-      <ScrollView
-        contentContainerStyle={[
-          styles.screenContainer,
-          { flexDirection: isLandscape ? 'row' : 'column' },
-        ]}
+      <StatusBar
+        barStyle={'light-content'}
+        translucent
+        backgroundColor="transparent"
+      />
+      <CustomSkeletonWrapper
+        isLoading={isLoading}
+        style={{ height: getHeight(359) }}
       >
-        <StatusBar barStyle={'light-content'} />
-
         <ImageBackground
           resizeMode="stretch"
           style={styles.imageContainer}
@@ -119,6 +122,9 @@ const MovieDetailScreen = ({ route }: any) => {
             </View>
           </View>
         </ImageBackground>
+      </CustomSkeletonWrapper>
+
+      <View style={styles.contentContainer}>
         <CustomSkeletonWrapper
           isLoading={isLoading}
           style={{
@@ -127,52 +133,58 @@ const MovieDetailScreen = ({ route }: any) => {
             alignSelf: 'center',
           }}
         >
-          <View style={styles.contentContainer}>
-            <Text style={[textStyles.h3, { color: colors.textMain }]}>
-              Genres
-            </Text>
+          <Text style={[textStyles.h3, { color: colors.textMain }]}>
+            Genres
+          </Text>
 
-            <View style={styles.genresContainer}>
-              {movieDetail?.genres?.map(item => (
-                <View
-                  key={item.id}
+          <View style={styles.genresContainer}>
+            {movieDetail?.genres?.map(item => (
+              <View
+                key={item.id}
+                style={[
+                  styles.genreaItem,
+                  { backgroundColor: getRandomColor() },
+                ]}
+              >
+                <Text
                   style={[
-                    styles.genreaItem,
-                    { backgroundColor: getRandomColor() },
+                    textStyles.h2,
+                    { color: colors.white, fontSize: getFontSize(12) },
                   ]}
                 >
-                  <Text
-                    style={[
-                      textStyles.h2,
-                      { color: colors.white, fontSize: getFontSize(12) },
-                    ]}
-                  >
-                    {item.name}
-                  </Text>
-                </View>
-              ))}
-            </View>
-
-            <Text
-              style={[
-                textStyles.h3,
-                { color: colors.textMain, marginVertical: getHeight(10) },
-              ]}
-            >
-              Overview
-            </Text>
-            <Text style={[textStyles.h4, { color: colors.grayMedium }]}>
-              {movieDetail?.overview}
-            </Text>
+                  {item.name}
+                </Text>
+              </View>
+            ))}
           </View>
         </CustomSkeletonWrapper>
-        <VideoPlayer
-          visible={videoUrl !== undefined}
-          onClose={() => setVideoUrl(undefined)}
-          videoKey={videoUrl ?? ''}
-        />
-      </ScrollView>
-    </CustomSkeletonWrapper>
+        <CustomSkeletonWrapper
+          isLoading={isLoading}
+          style={{
+            height: getHeight(200),
+            width: getWidth(360),
+            alignSelf: 'center',
+          }}
+        >
+          <Text
+            style={[
+              textStyles.h3,
+              { color: colors.textMain, marginVertical: getHeight(10) },
+            ]}
+          >
+            Overview
+          </Text>
+          <Text style={[textStyles.h4, { color: colors.grayMedium }]}>
+            {movieDetail?.overview}
+          </Text>
+        </CustomSkeletonWrapper>
+      </View>
+      <VideoPlayer
+        visible={videoUrl !== undefined}
+        onClose={() => setVideoUrl(undefined)}
+        videoKey={videoUrl ?? ''}
+      />
+    </ScrollView>
   );
 };
 
@@ -183,6 +195,7 @@ const styles = StyleSheet.create({
     flexGrow: 1,
     backgroundColor: colors.background,
     height: getHeight(359),
+    paddingBottom: getHeight(20),
   },
 
   imageContainer: {

@@ -23,30 +23,26 @@ const ScreenHeader: React.FC<ScreenHeaderProps> = ({
   onPress,
 }) => {
   return (
-    <SafeAreaView edges={['top']} style={styles.safeArea}>
-      <View style={styles.mainHeaderView}>
-        <View style={styles.rowView}>
-          <TouchableOpacity onPress={onPress} hitSlop={10}>
-            <BackIcon />
-          </TouchableOpacity>
+    // <SafeAreaView style={styles.safeArea}>
+    <View style={styles.mainHeaderView}>
+      <View style={styles.rowView}>
+        <TouchableOpacity onPress={onPress} hitSlop={10}>
+          <BackIcon />
+        </TouchableOpacity>
 
-          <View style={styles.centerContent}>
-            <Text style={[textStyles.h3, styles.title]} numberOfLines={1}>
-              {title}
+        <View style={styles.centerContent}>
+          <Text style={[textStyles.h3, styles.title]} numberOfLines={1}>
+            {title}
+          </Text>
+
+          {description ? (
+            <Text style={[textStyles.h3, styles.description]} numberOfLines={1}>
+              {description}
             </Text>
-
-            {description ? (
-              <Text
-                style={[textStyles.h3, styles.description]}
-                numberOfLines={1}
-              >
-                {description}
-              </Text>
-            ) : null}
-          </View>
+          ) : null}
         </View>
       </View>
-    </SafeAreaView>
+    </View>
   );
 };
 
@@ -62,7 +58,9 @@ const styles = StyleSheet.create({
   mainHeaderView: {
     paddingHorizontal: getWidth(5),
     backgroundColor: colors.white,
-    marginVertical: getHeight(10),
+    paddingVertical: getHeight(10),
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderColor,
   },
   rowView: {
     flexDirection: 'row',

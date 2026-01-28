@@ -1,17 +1,18 @@
 import React, { FC } from 'react';
 import { FlatList, StyleSheet, View, RefreshControl, Text } from 'react-native';
 import MovieListItem from './MovieListItem';
-import { getHeight, colors, getWidth } from '@/theme';
+import { getHeight, colors, getWidth, getFontSize, fonts } from '@/theme';
 import { Movie } from '@/api/types';
 import { useUpcomingMovies } from '@/features/movies';
 
 const MainFlatList: FC = () => {
-  const { data, isLoading, isError, refetch } = useUpcomingMovies();
+  const { data, isLoading, isError, refetch, isFetching } = useUpcomingMovies();
 
   const movies: Movie[] | undefined = data?.results;
+  const isInitialLoading = isLoading && !movies?.length;
 
   const renderItem = ({ item }: { item: Movie | null }) => (
-    <MovieListItem movie={item} isLoading={isLoading} />
+    <MovieListItem movie={item} isLoading={isInitialLoading} />
   );
 
   return (
@@ -25,7 +26,7 @@ const MainFlatList: FC = () => {
       renderItem={renderItem}
       showsVerticalScrollIndicator={false}
       refreshControl={
-        <RefreshControl refreshing={isLoading} onRefresh={() => refetch()} />
+        <RefreshControl refreshing={isFetching} onRefresh={() => refetch()} />
       }
       ListFooterComponent={<View style={{ height: getHeight(200) }} />}
       ListEmptyComponent={
@@ -55,7 +56,8 @@ const styles = StyleSheet.create({
     marginTop: getHeight(50),
   },
   emptyText: {
-    fontSize: 16,
+    fontSize: getFontSize(16),
     color: colors.black,
+    fontFamily: fonts.poppins.poppins500,
   },
 });

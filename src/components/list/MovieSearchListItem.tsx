@@ -1,5 +1,12 @@
-import React, { FC } from 'react';
-import { Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import React, { FC, useState } from 'react';
+import {
+  ActivityIndicator,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 
 import { Movie } from '@/api/types';
@@ -15,14 +22,20 @@ interface Props {
 }
 
 const MovieSearchListItem: FC<Props> = ({ movie }) => {
-  const navigation = useNavigation();
+  const navigation = useNavigation<any>();
   const { data: genresData } = useGenres();
+  const [loading, setLoading] = useState<boolean>(true);
+  const onLoadEnd = () => {
+    setLoading(false);
+  };
+  const hasImage = !!movie?.backdrop_path;
 
   const getGenreName = (ids: number[]) => {
     if (!ids || ids.length === 0 || !genresData?.genres) return '';
     const genre = genresData.genres.find(g => g.id === ids[0]);
     return genre ? genre.name : 'Unknown';
   };
+  const imageUri = hasImage ? IMAGE_BASE_URL + movie.backdrop_path : undefined;
 
   return (
     <CustomSkeletonWrapper isLoading={!movie} style={styles.container}>
@@ -38,14 +51,16 @@ const MovieSearchListItem: FC<Props> = ({ movie }) => {
         >
           <View style={styles.imageContainer}>
             <Image
-              source={{
-                uri: movie.backdrop_path
-                  ? IMAGE_BASE_URL + movie.backdrop_path
-                  : undefined,
-              }}
+              source={{ uri: imageUri }}
               resizeMode="cover"
               style={styles.image}
+              onLoadEnd={onLoadEnd}
             />
+            {loading && imageUri && (
+              <View style={styles.loaderContainer}>
+                <ActivityIndicator size="small" color={colors.secondary} />
+              </View>
+            )}
           </View>
 
           <View style={styles.contentContainer}>
@@ -84,6 +99,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
     overflow: 'hidden',
     marginRight: getWidth(15),
+    backgroundColor: colors.grayMedium,
+    position: 'relative',
   },
   image: {
     width: '100%',
@@ -108,5 +125,11 @@ const styles = StyleSheet.create({
     padding: 10,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  loaderContainer: {
+    ...StyleSheet.absoluteFill,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,0.2)',
   },
 });

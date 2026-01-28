@@ -21,6 +21,7 @@ import {
 import { AppButton } from '@/components';
 import ScreenHeader from '@/components/movie/ScreenHeader';
 import Svg, { Path } from 'react-native-svg';
+import { SafeAreaView } from 'react-native-safe-area-context';
 
 interface Seat {
   id: string;
@@ -90,121 +91,131 @@ const SeatSelectionScreen = () => {
     .reduce((sum, seat) => sum + seat.price, 0);
 
   return (
-    <View style={styles.container}>
-      <ScreenHeader
-        title={movieTitle || "The King's Man"}
-        description={`${
-          movieTitle || "The King's Man"
-        } ${dateString} | ${hall}`}
-        onPress={() => navigation.goBack()}
-      />
-
-      <ScrollView
-        horizontal
-        showsHorizontalScrollIndicator={true}
-        contentContainerStyle={styles.horizontalScroll}
-      >
-        <View style={styles.screenShapeContainer}>
-          <Svg
-            width={getWidth(250)}
-            height={getHeight(50)}
-            viewBox="0 0 100 20"
+    <SafeAreaView
+      style={{ flex: 1, backgroundColor: colors.white }}
+      edges={['top']}
+    >
+      <View style={styles.container}>
+        <ScreenHeader
+          title={movieTitle || "The King's Man"}
+          description={`${
+            movieTitle || "The King's Man"
+          } ${dateString} | ${hall}`}
+          onPress={() => navigation.goBack()}
+        />
+        <ScrollView>
+          <ScrollView
+            horizontal
+            showsHorizontalScrollIndicator={true}
+            contentContainerStyle={styles.horizontalScroll}
           >
-            <Path
-              d="M-2 16 Q50 -2 102 16"
-              fill="none"
-              stroke={colors.secondary}
-              strokeWidth="1"
-              opacity={0.5}
-            />
-          </Svg>
-          <Text style={styles.screenText}>SCREEN</Text>
-        </View>
-
-        <View style={[styles.seatGrid, { transform: [{ scale: scale }] }]}>
-          {Array.from({ length: ROWS }).map((_, rIndex) => {
-            const rowNum = rIndex + 1;
-            const rowSeats = seats.filter(s => s.row === rowNum);
-            return (
-              <View key={rowNum} style={styles.rowContainer}>
-                <Text style={styles.rowLabel}>{rowNum}</Text>
-                <View style={styles.rowSeats}>
-                  {rowSeats.map(seat => {
-                    let seatColor = colors.secondary;
-                    if (seat.status === 'taken') seatColor = colors.grayLight;
-                    if (seat.status === 'selected') seatColor = colors.gold;
-                    if (seat.type === 'vip' && seat.status !== 'selected')
-                      seatColor = colors.primary;
-
-                    return (
-                      <TouchableOpacity
-                        key={seat.id}
-                        onPress={() => handleSeatPress(seat.id)}
-                        disabled={seat.status === 'taken'}
-                        style={styles.seatWrapper}
-                      >
-                        <SeatIcon
-                          color={seatColor}
-                          width={14}
-                          height={14}
-                          style={
-                            seat.status === 'taken' ? { opacity: 0.5 } : {}
-                          }
-                        />
-                      </TouchableOpacity>
-                    );
-                  })}
-                </View>
+            <View style={{ transform: [{ scale: scale }] }}>
+              <View style={styles.screenShapeContainer}>
+                <Svg
+                  width={getWidth(250)}
+                  height={getHeight(50)}
+                  viewBox="0 0 100 20"
+                >
+                  <Path
+                    d="M-2 16 Q50 -2 102 16"
+                    fill="none"
+                    stroke={colors.secondary}
+                    strokeWidth="1"
+                    opacity={0.5}
+                  />
+                </Svg>
+                <Text style={styles.screenText}>SCREEN</Text>
               </View>
-            );
-          })}
-        </View>
-        <View style={styles.zoomControls}>
-          <TouchableOpacity
-            style={styles.zoomButton}
-            onPress={() => setScale(s => Math.min(s + 0.1, 1.5))}
-          >
-            <Text style={styles.zoomText}>+</Text>
-          </TouchableOpacity>
-          <TouchableOpacity
-            style={styles.zoomButton}
-            onPress={() => setScale(s => Math.max(s - 0.1, 0.5))}
-          >
-            <Text style={styles.zoomText}>-</Text>
-          </TouchableOpacity>
-        </View>
-      </ScrollView>
 
-      <View style={styles.footer}>
-        <View style={styles.legendContainer}>
-          <View style={styles.legendRow}>
-            <View style={styles.legendItem}>
-              <SeatIcon color={colors.gold} width={18} height={18} />
-              <Text style={styles.legendText}>Selected</Text>
+              <View style={[styles.seatGrid]}>
+                {Array.from({ length: ROWS }).map((_, rIndex) => {
+                  const rowNum = rIndex + 1;
+                  const rowSeats = seats.filter(s => s.row === rowNum);
+                  return (
+                    <View key={rowNum} style={styles.rowContainer}>
+                      <Text style={styles.rowLabel}>{rowNum}</Text>
+                      <View style={styles.rowSeats}>
+                        {rowSeats.map(seat => {
+                          let seatColor = colors.secondary;
+                          if (seat.status === 'taken')
+                            seatColor = colors.grayLight;
+                          if (seat.status === 'selected')
+                            seatColor = colors.gold;
+                          if (seat.type === 'vip' && seat.status !== 'selected')
+                            seatColor = colors.primary;
+
+                          return (
+                            <TouchableOpacity
+                              key={seat.id}
+                              onPress={() => handleSeatPress(seat.id)}
+                              disabled={seat.status === 'taken'}
+                              style={styles.seatWrapper}
+                            >
+                              <SeatIcon
+                                color={seatColor}
+                                width={14}
+                                height={14}
+                                style={
+                                  seat.status === 'taken'
+                                    ? { opacity: 0.5 }
+                                    : {}
+                                }
+                              />
+                            </TouchableOpacity>
+                          );
+                        })}
+                      </View>
+                    </View>
+                  );
+                })}
+              </View>
             </View>
-            <View style={styles.legendItem}>
-              <SeatIcon
-                color={colors.grayMedium}
-                width={18}
-                height={18}
-                style={{ opacity: 0.5 }}
-              />
-              <Text style={styles.legendText}>Not available</Text>
+          </ScrollView>
+          <View style={styles.zoomControls}>
+            <TouchableOpacity
+              style={styles.zoomButton}
+              onPress={() => setScale(s => Math.min(s + 0.1, 1.5))}
+            >
+              <Text style={styles.zoomText}>+</Text>
+            </TouchableOpacity>
+            <TouchableOpacity
+              style={styles.zoomButton}
+              onPress={() => setScale(s => Math.max(s - 0.1, 0.5))}
+            >
+              <Text style={styles.zoomText}>-</Text>
+            </TouchableOpacity>
+          </View>
+        </ScrollView>
+        <View style={styles.footer}>
+          <View style={styles.legendContainer}>
+            <View style={styles.legendRow}>
+              <View style={styles.legendItem}>
+                <SeatIcon color={colors.gold} width={18} height={18} />
+                <Text style={styles.legendText}>Selected</Text>
+              </View>
+              <View style={styles.legendItem}>
+                <SeatIcon
+                  color={colors.grayMedium}
+                  width={18}
+                  height={18}
+                  style={{ opacity: 0.5 }}
+                />
+                <Text style={styles.legendText}>Not available</Text>
+              </View>
+            </View>
+            <View style={styles.legendRow}>
+              <View style={styles.legendItem}>
+                <SeatIcon color={colors.primary} width={18} height={18} />
+                <Text style={styles.legendText}>VIP (150$)</Text>
+              </View>
+              <View style={styles.legendItem}>
+                <SeatIcon color={colors.secondary} width={18} height={18} />
+                <Text style={styles.legendText}>Regular (50 $)</Text>
+              </View>
             </View>
           </View>
-          <View style={styles.legendRow}>
-            <View style={styles.legendItem}>
-              <SeatIcon color={colors.primary} width={18} height={18} />
-              <Text style={styles.legendText}>VIP (150$)</Text>
-            </View>
-            <View style={styles.legendItem}>
-              <SeatIcon color={colors.secondary} width={18} height={18} />
-              <Text style={styles.legendText}>Regular (50 $)</Text>
-            </View>
-          </View>
-        </View>
 
-        {/* {selectedSeats.length > 0 && (
+          {/* {selectedSeats.length > 0 && (
           <View style={styles.selectedTagsContainer}>
             {seats
               .filter(s => s.status === 'selected')
@@ -220,44 +231,46 @@ const SeatSelectionScreen = () => {
               ))}
           </View>
         )} */}
-        {selectedSeats.length > 0 && (
-          <ScrollView
-            style={styles.selectedTagsContainer}
-            horizontal
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ alignItems: 'center' }}
-          >
-            {seats
-              .filter(s => s.status === 'selected')
-              .map(s => (
-                <View key={s.id} style={styles.selectedTag}>
-                  <Text style={styles.selectedTagText}>
-                    {s.col} / {s.row} row
-                  </Text>
-                  <TouchableOpacity onPress={() => handleSeatPress(s.id)}>
-                    <Text style={styles.closeText}>×</Text>
-                  </TouchableOpacity>
-                </View>
-              ))}
-          </ScrollView>
-        )}
+          {selectedSeats.length > 0 && (
+            <ScrollView
+              style={styles.selectedTagsContainer}
+              horizontal
+              showsHorizontalScrollIndicator={false}
+              contentContainerStyle={{ alignItems: 'center' }}
+            >
+              {seats
+                .filter(s => s.status === 'selected')
+                .map(s => (
+                  <View key={s.id} style={styles.selectedTag}>
+                    <Text style={styles.selectedTagText}>
+                      {s.col} / {s.row} row
+                    </Text>
+                    <TouchableOpacity onPress={() => handleSeatPress(s.id)}>
+                      <Text style={styles.closeText}>×</Text>
+                    </TouchableOpacity>
+                  </View>
+                ))}
+            </ScrollView>
+          )}
 
-        <View style={styles.buttonContainer}>
-          <View style={styles.priceContainer}>
-            <Text style={textStyles.h4}>Total Price</Text>
-            <Text style={[textStyles.h2, { color: colors.textMain }]}>
-              $ {totalPrice}
-            </Text>
+          <View style={styles.buttonContainer}>
+            <View style={styles.priceContainer}>
+              <Text style={textStyles.h4}>Total Price</Text>
+              <Text style={[textStyles.h2, { color: colors.textMain }]}>
+                $ {totalPrice}
+              </Text>
+            </View>
+            <AppButton
+              title="Proceed to pay"
+              variant="primary"
+              onPress={() => Alert.alert('Payment', `Pay $${totalPrice}`)}
+              style={styles.payButton}
+              disabled={selectedSeats.length === 0}
+            />
           </View>
-          <AppButton
-            title="Proceed to pay"
-            variant="primary"
-            onPress={() => Alert.alert('Payment', `Pay $${totalPrice}`)}
-            style={styles.payButton}
-          />
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -320,7 +333,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: getWidth(10),
     position: 'absolute',
-    bottom: getHeight(10),
+    bottom: getHeight(0),
     right: getWidth(10),
     zIndex: 10,
   },

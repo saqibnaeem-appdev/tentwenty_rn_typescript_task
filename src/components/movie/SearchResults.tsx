@@ -6,7 +6,14 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import { colors, getFontSize, getHeight, getWidth, textStyles } from '@/theme';
+import {
+  colors,
+  fonts,
+  getFontSize,
+  getHeight,
+  getWidth,
+  textStyles,
+} from '@/theme';
 import { Movie } from '@/api/types';
 import MovieSearchListItem from '../list/MovieSearchListItem';
 
@@ -42,6 +49,13 @@ const SearchResults: FC<Props> = ({
         ItemSeparatorComponent={() => (
           <View style={{ height: getHeight(20) }} />
         )}
+        ListEmptyComponent={
+          !isLoading ? (
+            <View style={styles.emptyContainer}>
+              <Text style={styles.emptyText}>{'No movies available.'}</Text>
+            </View>
+          ) : null
+        }
       />
     </View>
   );
@@ -70,5 +84,15 @@ const styles = StyleSheet.create({
     ...textStyles.h2,
     color: colors.textMain,
     paddingBottom: getHeight(10),
+  },
+  emptyContainer: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    marginTop: getHeight(50),
+  },
+  emptyText: {
+    fontSize: getFontSize(16),
+    color: colors.black,
+    fontFamily: fonts.poppins.poppins500,
   },
 });

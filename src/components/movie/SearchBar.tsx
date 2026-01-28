@@ -197,48 +197,48 @@ const SearchBar: FC<SearchBarProps> = ({
   }, [isSearching, isSubmitted]);
 
   return (
-    <SafeAreaView edges={['top']} style={styles.safeArea}>
-      <View style={styles.container}>
-        {isSubmitted ? (
-          <View style={styles.headerContainer}>
-            <TouchableOpacity onPress={onBack} style={styles.iconHit}>
-              <BackIcon color={colors.black} />
-            </TouchableOpacity>
+    // <SafeAreaView style={styles.safeArea}>
+    <View style={styles.container}>
+      {isSubmitted ? (
+        <View style={styles.headerContainer}>
+          <TouchableOpacity onPress={onBack} style={styles.iconHit}>
+            <BackIcon color={colors.black} />
+          </TouchableOpacity>
 
-            <Text style={styles.resultsText}>{resultsCount} Results Found</Text>
-          </View>
-        ) : isSearching ? (
-          <View style={styles.searchWrapper}>
-            <View style={styles.searchContainer}>
-              <SearchIcon />
+          <Text style={styles.resultsText}>{resultsCount} Results Found</Text>
+        </View>
+      ) : isSearching ? (
+        <View style={styles.searchWrapper}>
+          <View style={styles.searchContainer}>
+            <SearchIcon />
 
-              <TextInput
-                ref={textInputRef}
-                placeholder="TV shows, movies and more"
-                style={[textStyles.h4, styles.input]}
-                placeholderTextColor={colors.placeholderColor}
-                {...textInputProps}
-              />
+            <TextInput
+              ref={textInputRef}
+              placeholder="TV shows, movies and more"
+              style={[textStyles.h4, styles.input]}
+              placeholderTextColor={colors.placeholderColor}
+              {...textInputProps}
+            />
 
-              <TouchableOpacity onPress={onClear} style={styles.iconHit}>
-                <CrossIcon width={getWidth(24)} height={getHeight(24)} />
-              </TouchableOpacity>
-            </View>
-          </View>
-        ) : (
-          <View style={styles.contentContainer}>
-            <Text style={[textStyles.h3, styles.heading]}>Watch</Text>
-
-            <TouchableOpacity
-              onPress={() => setIsSearching(true)}
-              style={styles.iconHit}
-            >
-              <SearchIcon />
+            <TouchableOpacity onPress={onClear} style={styles.iconHit}>
+              <CrossIcon width={getWidth(24)} height={getHeight(24)} />
             </TouchableOpacity>
           </View>
-        )}
-      </View>
-    </SafeAreaView>
+        </View>
+      ) : (
+        <View style={styles.contentContainer}>
+          <Text style={[textStyles.h3, styles.heading]}>Watch</Text>
+
+          <TouchableOpacity
+            onPress={() => setIsSearching(true)}
+            style={styles.iconHit}
+          >
+            <SearchIcon />
+          </TouchableOpacity>
+        </View>
+      )}
+    </View>
+    // </SafeAreaView>
   );
 };
 
@@ -253,14 +253,16 @@ const styles = StyleSheet.create({
 
   container: {
     backgroundColor: colors.white,
-    marginVertical: getHeight(10),
     paddingHorizontal: getWidth(16),
+    borderBottomWidth: 1,
+    borderBottomColor: colors.borderColor,
   },
 
   contentContainer: {
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    marginVertical: getHeight(10),
   },
 
   heading: {
@@ -270,6 +272,7 @@ const styles = StyleSheet.create({
 
   searchWrapper: {
     alignItems: 'center',
+    marginVertical: getHeight(10),
   },
 
   searchContainer: {
@@ -292,6 +295,7 @@ const styles = StyleSheet.create({
   headerContainer: {
     flexDirection: 'row',
     alignItems: 'center',
+    marginVertical: getHeight(10),
   },
 
   resultsText: {
